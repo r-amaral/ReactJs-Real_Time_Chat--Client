@@ -1,5 +1,6 @@
 import React from "react";
+import PageTemplateWrapper from "../Components/PageTemplate";
 
 export const Room = () => {
-  return <div>Room</div>;
+  return <PageTemplateWrapper>Room</PageTemplateWrapper>;
 };
