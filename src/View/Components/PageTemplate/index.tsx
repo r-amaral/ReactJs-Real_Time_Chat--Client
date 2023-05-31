@@ -6,7 +6,7 @@ interface PageTemplateProps {
 }
 
 const PageTemplate = ({ children }: PageTemplateProps) => {
-  return <PageTemplateWrapper>index</PageTemplateWrapper>;
+  return <PageTemplateWrapper>{children}</PageTemplateWrapper>;
 };
 
 export default PageTemplate;
