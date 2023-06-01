@@ -1,5 +1,5 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { JoinRoom, Room } from "../View";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 const RoutesChat = () => {
   return (

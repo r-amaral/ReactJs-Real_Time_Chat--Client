@@ -1,6 +1,7 @@
-import React, { createContext, useContext } from "react";
-import { PayloadProps } from "../Interfaces";
 import { Socket } from "socket.io-client";
+import React, { createContext, useContext } from "react";
+
+import { PayloadProps } from "../Interfaces";
 
 interface RoomProviderProps {
   children: React.ReactNode;

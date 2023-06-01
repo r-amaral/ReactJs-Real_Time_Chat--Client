@@ -1,21 +1,17 @@
 import React from "react";
-import PageTemplateWrapper from "../../Components/PageTemplate";
-import InputMessage from "../../Components/InputMessage";
-import Message from "../../Components/Message";
-import {
-  InputWrapper,
-  MessagesWrapper,
-  ProfileLeave,
-  ProfileWrapper,
-} from "./styles";
-import Profile from "../../Components/Profile";
-import io from "socket.io-client";
-
 import * as uuid from "uuid";
-import { PayloadProps } from "../../Interfaces";
-import { useRoomData } from "../../Context";
-import { timeFormart } from "../../utils";
+import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
+
+import { timeFormart } from "../../utils";
+import { useRoomData } from "../../Context";
+import Message from "../../Components/Message";
+import Profile from "../../Components/Profile";
+import { PayloadProps } from "../../Interfaces";
+import InputMessage from "../../Components/InputMessage";
+import PageTemplateWrapper from "../../Components/PageTemplate";
+
+import * as S from "./styles";
 
 export const Room = () => {
   const port = 3001;
@@ -78,11 +74,11 @@ export const Room = () => {
 
   return (
     <PageTemplateWrapper>
-      <ProfileWrapper>
+      <S.ProfileWrapper>
         <Profile profileName={author} />
-        <ProfileLeave onClick={handleDisconect}>Leave</ProfileLeave>
-      </ProfileWrapper>
-      <MessagesWrapper ref={listRef}>
+        <S.ProfileLeave onClick={handleDisconect}>Leave</S.ProfileLeave>
+      </S.ProfileWrapper>
+      <S.MessagesWrapper ref={listRef}>
         {messages.map((message) => (
           <Message
             key={message.id}
@@ -92,14 +88,14 @@ export const Room = () => {
             message={message.message}
           />
         ))}
-      </MessagesWrapper>
-      <InputWrapper>
+      </S.MessagesWrapper>
+      <S.InputWrapper>
         <InputMessage
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onClick={() => handleSendMessage()}
         />
-      </InputWrapper>
+      </S.InputWrapper>
     </PageTemplateWrapper>
   );
 };

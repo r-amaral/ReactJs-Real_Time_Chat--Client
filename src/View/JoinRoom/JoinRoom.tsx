@@ -1,8 +1,10 @@
 import React from "react";
 import * as uuid from "uuid";
-import { useRoomData } from "../../Context";
 import { useNavigate } from "react-router-dom";
+
+import { useRoomData } from "../../Context";
 import PageTemplate from "../../Components/PageTemplate";
+
 import { ButtonJoinRoom, JoinRoomInput, JoinRoomWrapper } from "./styles";
 
 export const JoinRoom = () => {
