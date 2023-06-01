@@ -22,10 +22,10 @@ export const MessageHeaderContainer = styled.div<{ localUser: boolean }>`
 
 export const MessageText = styled.span<{ localUser: boolean }>`
   font-weight: 400;
-  font-size: 12px;
+  font-size: 16px;
   color: #e1e1e6;
   padding: 14px;
-
+  max-width: 40vw;
   background: ${({ localUser }) => (localUser ? "#07847E" : "#633BBC")};
   border-radius: ${({ localUser }) =>
     localUser ? " 8px 8px 0px 8px" : "0px 8px 8px 8px"};
