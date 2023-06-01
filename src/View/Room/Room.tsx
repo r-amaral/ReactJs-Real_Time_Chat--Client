@@ -2,7 +2,12 @@ import React from "react";
 import PageTemplateWrapper from "../../Components/PageTemplate";
 import InputMessage from "../../Components/InputMessage";
 import Message from "../../Components/Message";
-import { InputWrapper, MessagesWrapper, ProfileWrapper } from "./styles";
+import {
+  InputWrapper,
+  MessagesWrapper,
+  ProfileLeave,
+  ProfileWrapper,
+} from "./styles";
 import Profile from "../../Components/Profile";
 import io from "socket.io-client";
 
@@ -68,6 +73,7 @@ export const Room = () => {
     <PageTemplateWrapper>
       <ProfileWrapper>
         <Profile profileName={author} />
+        <ProfileLeave onClick={() => navigate("/")}>Leave</ProfileLeave>
       </ProfileWrapper>
       <MessagesWrapper ref={listRef}>
         {messages.map((message) => (

@@ -25,6 +25,9 @@ export const MessagesWrapper = styled.div`
 `;
 
 export const ProfileWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   max-height: 10vh;
 `;
 
@@ -32,4 +35,14 @@ export const InputWrapper = styled.div`
   display: flex;
   align-items: center;
   max-height: 10vh;
+`;
+
+export const ProfileLeave = styled.span`
+  color: white;
+  cursor: pointer;
+  transition: all 300ms ease-in-out 0s;
+  font-weight: 500;
+  &:hover {
+    color: rgb(91, 58, 161);
+  }
 `;
