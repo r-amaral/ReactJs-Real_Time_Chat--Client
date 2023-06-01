@@ -9,4 +9,9 @@ export const PageTemplateWrapper = styled.div`
 
   padding: 32px 73px;
   box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  justify-content: space-between;
 `;
