@@ -10,6 +10,8 @@ export const InputWrapper = styled.div`
   border-radius: 999px;
   padding: 14px 24px;
   gap: 10px;
+  box-sizing: border-box;
+  height: 52px;
 `;
 
 export const Input = styled.input`
