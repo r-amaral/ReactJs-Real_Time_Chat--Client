@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import SendIcon from "../../../assets/send.svg";
+import SendIcon from "../../assets/send.svg";
 
 export const InputWrapper = styled.div`
   display: flex;
