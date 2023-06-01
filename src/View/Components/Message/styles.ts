@@ -9,6 +9,7 @@ export const MessageWrapper = styled.div<{ localUser: boolean }>`
 `;
 
 export const MessageHeaderItem = styled.span`
+  text-transform: capitalize;
   font-weight: 400;
   font-size: 12px;
   text-align: center;

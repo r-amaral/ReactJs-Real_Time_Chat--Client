@@ -1,4 +1,3 @@
-import React from "react";
 import DogImg from "../../../assets/dog.jpg";
 import {
   ProfileBall,
@@ -13,19 +12,17 @@ interface ProfileProps {
   profileName: string;
 }
 
-const Profile = ({ profileName }: ProfileProps) => {
-  return (
-    <ProfileWrapper>
-      <ProfileImage src={DogImg} />
-      <ProfileContent>
-        <ProfileName>{profileName}</ProfileName>
-        <ProfileStatus>
-          <ProfileBall />
-          Online
-        </ProfileStatus>
-      </ProfileContent>
-    </ProfileWrapper>
-  );
-};
+const Profile = ({ profileName }: ProfileProps) => (
+  <ProfileWrapper>
+    <ProfileImage src={DogImg} />
+    <ProfileContent>
+      <ProfileName>{profileName}</ProfileName>
+      <ProfileStatus>
+        <ProfileBall />
+        Online
+      </ProfileStatus>
+    </ProfileContent>
+  </ProfileWrapper>
+);
 
 export default Profile;

@@ -22,6 +22,7 @@ export const ProfileName = styled.span`
   font-weight: 700;
   font-size: 16px;
   color: #e1e1e6;
+  text-transform: capitalize;
 `;
 
 export const ProfileStatus = styled.span`
