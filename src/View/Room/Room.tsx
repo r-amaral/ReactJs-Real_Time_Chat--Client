@@ -1,33 +1,27 @@
 import React from "react";
-import PageTemplateWrapper from "../Components/PageTemplate";
-import InputMessage from "../Components/InputMessage";
-import Message from "../Components/Message";
+import PageTemplateWrapper from "../../Components/PageTemplate";
+import InputMessage from "../../Components/InputMessage";
+import Message from "../../Components/Message";
 import { InputWrapper, MessagesWrapper, ProfileWrapper } from "./styles";
-import Profile from "../Components/Profile";
+import Profile from "../../Components/Profile";
+import io from "socket.io-client";
 
-import io, { Socket } from "socket.io-client";
 import * as uuid from "uuid";
-
-interface PayloadProps {
-  id?: string;
-  author: string;
-  message: string;
-  time?: string;
-  room?: string;
-}
+import { PayloadProps } from "../../Interfaces";
+import { useRoomData } from "../../Context";
+import { timeFormart } from "../../utils";
+import { useNavigate } from "react-router-dom";
 
 export const Room = () => {
   const port = 3001;
-
-  const socketIORef = React.useRef<Socket>();
   const listRef = React.useRef<HTMLDivElement>(null);
 
-  const [author, setAuthor] = React.useState("");
-  const [message, setMessage] = React.useState("");
-  const [messages, setMessages] = React.useState<PayloadProps[]>([]);
+  const navigate = useNavigate();
+  const { author, message, setMessage, messages, setMessages, socketIORef } =
+    useRoomData();
 
   const handleSendMessage = async () => {
-    if (author && message) {
+    if (message) {
       const messageData: PayloadProps = {
         id: uuid.v4(),
         author,
@@ -51,35 +45,17 @@ export const Room = () => {
     setMessages([...messages, messageData]);
   };
 
-  const joinRoom = () => {
-    if (!author) {
-      const joined = {
-        id: uuid.v4(),
-        author,
-      };
-
-      socketIORef.current?.emit("joined-room", joined);
-      setAuthor(joined.author);
-    }
-  };
-
-  const timeFormart = () => {
-    const time = new Date();
-    const hour = time.getHours();
-    const min = time.getMinutes();
-
-    return (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min);
+  const connectionSocket = () => {
+    socketIORef.current = io(`http://localhost:${port}`);
+    socketIORef.current.on("connect", () => console.log("conectado"));
+    socketIORef.current!.on("msgToClient", (message: PayloadProps) =>
+      receivedMessage(message)
+    );
   };
 
   React.useEffect(() => {
-    socketIORef.current = io(`http://localhost:${port}`);
-    socketIORef.current.on("connect", () => {
-      console.log("conectado");
-    });
-
-    socketIORef.current.on("msgToClient", (message: PayloadProps) =>
-      receivedMessage(message)
-    );
+    if (!author) navigate("/");
+    connectionSocket();
   }, [socketIORef, messages, author, message]);
 
   React.useEffect(() => {
@@ -90,21 +66,13 @@ export const Room = () => {
 
   return (
     <PageTemplateWrapper>
-      <div>
-        <input
-          type="text"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          placeholder="Enter name..."
-        />
-        <button onClick={joinRoom}>join</button>
-      </div>
       <ProfileWrapper>
         <Profile profileName={author} />
       </ProfileWrapper>
       <MessagesWrapper ref={listRef}>
         {messages.map((message) => (
           <Message
+            key={message.id}
             user={message.author === author}
             name={message.author}
             time={message.time}
@@ -116,9 +84,7 @@ export const Room = () => {
         <InputMessage
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          onClick={() => {
-            handleSendMessage();
-          }}
+          onClick={() => handleSendMessage()}
         />
       </InputWrapper>
     </PageTemplateWrapper>
