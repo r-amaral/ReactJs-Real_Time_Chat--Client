@@ -25,6 +25,8 @@ export const Room = () => {
   const { author, message, setMessage, messages, setMessages, socketIORef } =
     useRoomData();
 
+  const userId = React.useMemo(() => uuid.v4(), []);
+
   const handleSendMessage = async () => {
     if (message) {
       const messageData: PayloadProps = {
@@ -51,11 +53,18 @@ export const Room = () => {
   };
 
   const connectionSocket = () => {
-    socketIORef.current = io(`http://localhost:${port}`);
+    socketIORef.current = io(`http://localhost:${port}`, {
+      query: { name: author, userId },
+    });
     socketIORef.current.on("connect", () => console.log("conectado"));
     socketIORef.current!.on("msgToClient", (message: PayloadProps) =>
       receivedMessage(message)
     );
+  };
+
+  const handleDisconect = () => {
+    socketIORef.current?.disconnect();
+    navigate("/");
   };
 
   React.useEffect(() => {
@@ -71,7 +80,7 @@ export const Room = () => {
     <PageTemplateWrapper>
       <ProfileWrapper>
         <Profile profileName={author} />
-        <ProfileLeave onClick={() => navigate("/")}>Leave</ProfileLeave>
+        <ProfileLeave onClick={handleDisconect}>Leave</ProfileLeave>
       </ProfileWrapper>
       <MessagesWrapper ref={listRef}>
         {messages.map((message) => (
