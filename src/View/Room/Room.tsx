@@ -60,10 +60,8 @@ export const Room = () => {
 
   React.useEffect(() => {
     if (!author) navigate("/");
-    connectionSocket();
-  }, [socketIORef, messages, author, message]);
 
-  React.useEffect(() => {
+    connectionSocket();
     if (listRef.current) {
       listRef.current.scrollTop = listRef.current.scrollHeight;
     }
