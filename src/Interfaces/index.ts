@@ -11,6 +11,8 @@ export interface MessageProps {
   time?: string;
   name: string;
   message: string;
+  id?: string;
+  deleteMessage(id?: string): void;
 }
 
 export interface ProfileProps {

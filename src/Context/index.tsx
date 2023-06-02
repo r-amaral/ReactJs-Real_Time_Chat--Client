@@ -14,16 +14,16 @@ interface RoomContextProps {
   setMessage(e: string): void;
   messages: PayloadProps[];
   setMessages(e: PayloadProps[]): void;
-  socketIORef: React.MutableRefObject<Socket | undefined>;
+  socketIORef: React.MutableRefObject<Socket | any>;
 }
 
 const RoomContext = createContext({} as RoomContextProps);
 
 const RoomProvider = ({ children }: RoomProviderProps) => {
-  const socketIORef = React.useRef<Socket>();
+  const socketIORef = React.useRef();
 
-  const [author, setAuthor] = React.useState("");
-  const [message, setMessage] = React.useState("");
+  const [author, setAuthor] = React.useState<string>("");
+  const [message, setMessage] = React.useState<string>("");
   const [messages, setMessages] = React.useState<PayloadProps[]>([]);
 
   return (

@@ -21,12 +21,13 @@ export const Room = () => {
   const { author, message, setMessage, messages, setMessages, socketIORef } =
     useRoomData();
 
-  const userId = React.useMemo(() => uuid.v4(), []);
+  const userId = React.useMemo(() => uuid.v4(), [author]);
+  const messageId = React.useMemo(() => uuid.v4(), [messages]);
 
-  const handleSendMessage = async () => {
+  const sendMessage = async () => {
     if (message) {
       const messageData: PayloadProps = {
-        id: uuid.v4(),
+        id: messageId,
         author,
         message,
         time: timeFormart(),
@@ -37,14 +38,17 @@ export const Room = () => {
     }
   };
 
+  const updateMessages = (messages: PayloadProps[]) => {
+    socketIORef.current.emit("msgToServer", messages);
+  };
+
   const receivedMessage = (newmessage: PayloadProps) => {
     const messageData: PayloadProps = {
-      id: uuid.v4(),
+      id: messageId,
       author: newmessage.author,
       message: newmessage.message,
       time: timeFormart(),
     };
-
     setMessages([...messages, messageData]);
   };
 
@@ -52,21 +56,34 @@ export const Room = () => {
     socketIORef.current = io(`http://localhost:${port}`, {
       query: { name: author, userId },
     });
+
     socketIORef.current.on("connect", () => console.log("conectado"));
-    socketIORef.current!.on("msgToClient", (message: PayloadProps) =>
+
+    socketIORef.current.on("msgToClient", (message: PayloadProps) =>
       receivedMessage(message)
+    );
+    socketIORef.current.on("msgToServer", (messages: PayloadProps[]) =>
+      setMessages(messages)
+    );
+    socketIORef.current.on("messageDeleted", (messages: PayloadProps[]) =>
+      updateMessages(messages)
     );
   };
 
-  const handleDisconect = () => {
+  const disconectUser = () => {
     socketIORef.current?.disconnect();
     navigate("/");
+  };
+
+  const handleDeleteMessage = (id: string) => {
+    socketIORef.current.emit("deleteMessage", id);
   };
 
   React.useEffect(() => {
     if (!author) navigate("/");
 
     connectionSocket();
+
     if (listRef.current) {
       listRef.current.scrollTop = listRef.current.scrollHeight;
     }
@@ -76,7 +93,7 @@ export const Room = () => {
     <PageTemplateWrapper>
       <S.ProfileWrapper>
         <Profile profileName={author} />
-        <S.ProfileLeave onClick={handleDisconect}>Leave</S.ProfileLeave>
+        <S.ProfileLeave onClick={disconectUser}>Leave</S.ProfileLeave>
       </S.ProfileWrapper>
       <S.MessagesWrapper ref={listRef}>
         {messages.map((message) => (
@@ -86,6 +103,8 @@ export const Room = () => {
             name={message.author}
             time={message.time}
             message={message.message}
+            id={message.id}
+            deleteMessage={handleDeleteMessage}
           />
         ))}
       </S.MessagesWrapper>
@@ -93,7 +112,7 @@ export const Room = () => {
         <InputMessage
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          onClick={() => handleSendMessage()}
+          onClick={() => sendMessage()}
         />
       </S.InputWrapper>
     </PageTemplateWrapper>
